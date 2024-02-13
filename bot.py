@@ -2,12 +2,11 @@
 
 from chatterbot import ChatBot
 from chatterbot.trainers import ListTrainer
-# from cleaner import clean_corpus
 import tkinter as tk
 import logging
+from cleaner_yaml import clean_yaml
 
 
-CORPUS_FILE = "chat.txt"
 chatbot = ChatBot(
     "Fitbot",
     storage_adapter='chatterbot.storage.SQLStorageAdapter',
@@ -52,13 +51,14 @@ def display_root():
 
     root.mainloop()
 
+training_corpus = ['english/sports.yml', 'english/food.yml']
 
 def main():
     trainer = ListTrainer(chatbot)
-    # cleaned_corpus = clean_corpus(CORPUS_FILE)
-    # trainer.train(cleaned_corpus)
+    for corpus in training_corpus:
+        cleaned_data = clean_yaml(corpus)
+        trainer.train(cleaned_data)
     display_root()
-
 
 if __name__ == "__main__":
     main()
