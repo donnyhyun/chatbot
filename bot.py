@@ -29,13 +29,10 @@ def display_root():
     text_area = tk.Text(root, bg="white", width=70, height=20)
     text_area.pack()
 
-    input_field = tk.Entry(root, width=50)
+    input_field = tk.Entry(root, width=50, bd=4, insertwidth=3)
     input_field.pack()
 
-    send_button = tk.Button(root, text="Send", command=lambda: send_message())
-    send_button.pack()
-
-    def send_message():
+    def send_message(event=None):
         user_input = input_field.get()
 
         input_field.delete(0, tk.END)
@@ -43,15 +40,22 @@ def display_root():
         response = bot_response(user_input)
 
         text_area.insert(tk.END, f"You: {user_input}\n")
-        text_area.insert(tk.END, f"🏋: {response}\n")
+        text_area.insert(tk.END, f"Fitbot🏋: {response}\n")
 
         if not response:
             root.destroy()
+
+    send_button = tk.Button(root, text="Send", command=lambda: send_message())
+    send_button.pack()
+
+    root.bind('<Return>', send_message)
     logger = logging.getLogger()
 
     root.mainloop()
 
+
 training_corpus = ['english/sports.yml', 'english/food.yml']
+
 
 def main():
     trainer = ListTrainer(chatbot)
@@ -59,6 +63,7 @@ def main():
         cleaned_data = clean_yaml(corpus)
         trainer.train(cleaned_data)
     display_root()
+
 
 if __name__ == "__main__":
     main()
